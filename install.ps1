@@ -12,6 +12,11 @@ function InstallProfile {
         return
     }
 
+    if (-not (CheckAzureCli)) {
+        Write-Host "PSAZ requires Azure CLI to be installed."
+        return
+    }
+
     $profilePath = EnsureProfile
     $scriptPath  = EnsureScriptPathInLocalAppData
     $profileLine = ". `"$scriptPath`""
@@ -27,6 +32,11 @@ function InstallProfile {
 
     Add-Content -Path $profilePath -Value $profileLine
     Write-Host "PSAZ added to profile."    
+}
+
+# Checks whether Azure CLI is installed.
+function CheckAzureCli {
+    return [bool](Get-Command az -ErrorAction SilentlyContinue)
 }
 
 # Checks whether source files are available.
@@ -58,6 +68,11 @@ function EnsureScriptPathInLocalAppData {
 function InstallModule {
     if (-not (CheckSource)) {
         Write-Host "Source files unavailable."
+        return
+    }
+
+    if (-not (CheckAzureCli)) {
+        Write-Host "PSAZ requires Azure CLI to be installed."
         return
     }
 
