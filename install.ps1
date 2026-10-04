@@ -1,27 +1,43 @@
 # Define variables.
+$folderName = 'psaz'
 $scriptName = 'psaz.ps1'
 
 # Define the install functions.
 function InstallProfile {
-    if (-not (Test-Path $PROFILE)) {
-        New-Item -Path $PROFILE -ItemType File -Force | Out-Null
-    }
-
-    $scriptPath  = Join-Path $PSScriptRoot $scriptName
+    $profilePath = EnsureProfile
+    $scriptPath  = EnsureScriptPathInLocalAppData
     $profileLine = ". `"$scriptPath`""
 
     if (Select-String -Path $PROFILE -SimpleMatch $profileLine -Quiet) {
         Write-Host "Profile already contains PSAZ."
-    } else {
-        Add-Content -Path $PROFILE -Value $profileLine
-
-        # Only add a blank line above the entry if the profile already has content.
-        if (-not [string]::IsNullOrWhiteSpace((Get-Content -Path $PROFILE -Raw))) {
-            $entry = "`n$entry"
-        }
-
-        Write-Host "PSAZ added to profile."
+        return
     }
+
+    if (-not [string]::IsNullOrWhiteSpace((Get-Content -Path $profilePath -Raw))) {
+        $profileLine = "`n$profileLine"
+    }
+
+    Add-Content -Path $profilePath -Value $profileLine
+    Write-Host "PSAZ added to profile."    
+}
+
+function EnsureProfile {
+    if (-not (Test-Path $PROFILE)) {
+        New-Item -Path $PROFILE -ItemType File -Force | Out-Null
+    }
+
+    return $PROFILE
+}
+
+function EnsureScriptPathInLocalAppData {
+    $folderPath =      Join-Path $env:LOCALAPPDATA $folderName
+    $sourcePath =      Join-Path $PSScriptRoot $scriptName
+    $destinationPath = Join-Path $folderPath $scriptName
+
+    New-Item -ItemType Directory -Path $folderPath -Force | Out-Null
+    Copy-Item -LiteralPath $sourcePath -Destination $destinationPath -Force
+
+    return $destinationPath
 }
 
 function InstallModule {
