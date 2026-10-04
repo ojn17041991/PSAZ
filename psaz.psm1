@@ -1,5 +1,2 @@
-function HelloWorld {
-    Write-Output "Hello World"
-}
-
+. "$PSScriptRoot\psaz.ps1"
 Export-ModuleMember -Function HelloWorld

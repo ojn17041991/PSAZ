@@ -88,9 +88,11 @@ function EnsureModulePathInDocuments {
     $powershellFolderPath  = Join-Path $documentFolderPath $powershellFolderName
     $powershellModulesPath = Join-Path $powershellFolderPath "\Modules\"
     $destinationFolderPath = Join-Path $powershellModulesPath $folderName
+    $destinationScriptPath = Join-Path $destinationFolderPath $scriptName
     $destinationModulePath = Join-Path $destinationFolderPath $moduleName
 
     New-Item -ItemType Directory -Path $destinationFolderPath -Force | Out-Null
+    Copy-Item -LiteralPath $sourceScriptPath -Destination $destinationScriptPath -Force
     Copy-Item -LiteralPath $sourceModulePath -Destination $destinationModulePath -Force
 
     return $destinationModulePath
