@@ -1,6 +1,27 @@
+# Define variables.
+$scriptName = 'psaz.ps1'
+
 # Define the install functions.
 function InstallProfile {
-    Write-Host "X." -ForegroundColor Cyan
+    if (-not (Test-Path $PROFILE)) {
+        New-Item -Path $PROFILE -ItemType File -Force | Out-Null
+    }
+
+    $scriptPath  = Join-Path $PSScriptRoot $scriptName
+    $profileLine = ". `"$scriptPath`""
+
+    if (Select-String -Path $PROFILE -SimpleMatch $profileLine -Quiet) {
+        Write-Host "Profile already contains PSAZ."
+    } else {
+        Add-Content -Path $PROFILE -Value $profileLine
+
+        # Only add a blank line above the entry if the profile already has content.
+        if (-not [string]::IsNullOrWhiteSpace((Get-Content -Path $PROFILE -Raw))) {
+            $entry = "`n$entry"
+        }
+
+        Write-Host "PSAZ added to profile."
+    }
 }
 
 function InstallModule {
