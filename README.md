@@ -2,11 +2,6 @@
 
 PowerShell helper that allows Azure CLI users to get Azure resource IDs from Azure resource names.
 
-## Requirements
-
-- Windows PowerShell 5.1 or PowerShell 7
-- [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) (`az`)
-
 ## Install
 
 1. Download or clone this folder.
@@ -18,17 +13,14 @@ PowerShell helper that allows Azure CLI users to get Azure resource IDs from Azu
 
 To update, pull the latest files and run `install.bat` again.
 
-PSAZ installs for the PowerShell version that runs the installer. `install.bat` uses Windows PowerShell 5.1, so to install for PowerShell 7 as well, run `install.ps1` from a PowerShell 7 window.
-
 ## Use
 
-WIP
+Run `Get-AzResourceId` or `azid` with a resource name to get the ID of the Azure resource with that name.
 
-## Files
+## Examples
 
-| File          | Purpose                                     |
-| ------------- | ------------------------------------------- |
-| `install.bat` | Launcher. Double-click this                 |
-| `install.ps1` | The installer                               |
-| `psaz.ps1`    | The PSAZ functions                          |
-| `psaz.psm1`   | Loads `psaz.ps1` when installed as a module |
+`az resource show --ids (azid "ResourceGroupName")`
+
+`az functionapp show --ids (azid "<FunctionAppName")`
+
+`az keyvault secret list --vault-name "<KeyVaultName>"`
