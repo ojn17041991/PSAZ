@@ -19,8 +19,8 @@ Run `Get-AzResourceId` or `azid` with a resource name to get the ID of the Azure
 
 ## Examples
 
-`az resource show --ids (azid "ResourceGroupName")`
+`az resource show --ids (Get-AzResourceId "<ResourceGroupName>")`
 
 `az functionapp show --ids (azid "<FunctionAppName")`
 
-`az keyvault secret list --vault-name "<KeyVaultName>"`
+`az keyvault show --ids (azid "<KeyVaultName>")`
