@@ -22,7 +22,7 @@ function InstallProfile {
     $profileLine = ". `"$scriptPath`""
 
     if (Select-String -Path $profilePath -SimpleMatch $profileLine -Quiet) {
-        Write-Host "Profile already contains PSAZ."
+        Write-Host "PSAZ updated in profile."
         return
     }
 
