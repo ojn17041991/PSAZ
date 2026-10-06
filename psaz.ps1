@@ -1,4 +1,5 @@
 Set-Alias -Name azid -Value Get-AzResourceId
+Set-Alias -Name aztype -Value Get-AzResourceTypes
 
 function Get-AzResourceId {
     [CmdletBinding()]
@@ -49,8 +50,6 @@ function Get-AzResourceId {
         return $allMatches[0].id
     }
 }
-
-Set-Alias -Name aztype -Value Get-AzResourceTypes
 
 function Get-AzResourceTypes {
     [CmdletBinding()]
