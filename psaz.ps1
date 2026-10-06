@@ -10,6 +10,12 @@ function Get-AzResourceId {
         [string]$ResourceType
     )
 
+    $ResourceName = $ResourceName.Trim()
+    
+    if ($ResourceType) {
+        $ResourceType = $ResourceType.Trim()
+    }
+
     if (-not (Test-AzLoggedIn)) {
         Write-Host "Not connected to Azure. Please run 'az login' first." -ForegroundColor Red
 	    return $null
