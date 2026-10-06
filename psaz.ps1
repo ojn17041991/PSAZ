@@ -42,6 +42,21 @@ function Get-AzResourceId {
     }
 }
 
+Set-Alias -Name aztype -Value Get-AzResourceTypes
+
+function Get-AzResourceTypes {
+    param (
+        [CmdletBinding()]
+        [Parameter(Mandatory = $false, Position = 0)]
+        [string]$SearchTerm = "*"
+    )
+
+    az provider list --query "[].resourceTypes[].resourceType" -o tsv |
+        Select-Object -Unique |
+        Where-Object { $_ -like "$SearchTerm" } |
+        Sort-Object
+}
+
 function Test-AzLoggedIn {
     return [bool](az account show 2>$null)
 }
