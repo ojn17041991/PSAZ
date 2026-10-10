@@ -1,2 +1,2 @@
 . "$PSScriptRoot\psaz.ps1"
-Export-ModuleMember -Function HelloWorld
+Export-ModuleMember -Function Get-AzResourceId, Get-AzResourceTypes, Test-AzLoggedIn
