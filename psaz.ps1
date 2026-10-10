@@ -45,6 +45,9 @@ function Get-AzResourceId {
         System.String. Returns the ARM resource ID, or $null if not found/ambiguous.
     #>
 
+    # Informational logging.
+    Write-Verbose "Starting Get-AzResourceId function."
+
     # Variable definitions.
     $ResourceGroupType = 'Microsoft.Resources/resourceGroups'
 
@@ -58,18 +61,23 @@ function Get-AzResourceId {
     if (-not (Test-AzLoggedIn)) {
         Write-Host "Not connected to Azure. Please run 'az login' first." -ForegroundColor Red
         return $null
+    } else {
+        Write-Verbose "Connected to Azure."
     }
 
     # Get resources and resource groups from Azure based on requested resource name and type.
     if ($ResourceType) {
         if ($ResourceType -eq $ResourceGroupType) {
+            Write-Verbose "Resource group type selected."
             $resources = @()
             $groups    = az group list --query "[?name=='$ResourceName'].{id:id, name:name, type:'$ResourceGroupType'}" -o json 2>$null | ConvertFrom-Json
         } else {
+            Write-Verbose "Resource type selected."
             $resources = az resource list --resource-type $ResourceType --query "[?name=='$ResourceName'].{id:id, name:name, type:type}" -o json 2>$null | ConvertFrom-Json
             $groups    = @()
         }
     } else {
+        Write-Verbose "Resource type not specified."
         $resources = az resource list --query "[?name=='$ResourceName'].{id:id, name:name, type:type}" -o json 2>$null | ConvertFrom-Json
         $groups    = az group list --query "[?name=='$ResourceName'].{id:id, name:name, type:'$ResourceGroupType'}" -o json 2>$null | ConvertFrom-Json
     }
@@ -86,6 +94,7 @@ function Get-AzResourceId {
         $allMatches.type | Select-Object -Unique | ForEach-Object { Write-Host '-' $_ -ForegroundColor Red }
         return $null
     } else {
+        Write-Verbose "Single resource match found."
         return $allMatches[0].id
     }
 }
@@ -126,6 +135,10 @@ function Get-AzResourceTypes {
         System.String. Returns the matching Azure Resource Types based on the search term.
     #>
 
+    # Informational logging.
+    Write-Verbose "Starting Get-AzResourceTypes function."
+
+    # Search for Azure Resource Types.
     az provider list --query "[].resourceTypes[].resourceType" -o tsv |
         Select-Object -Unique |
         Where-Object { $_ -like "$SearchTerm" } |
@@ -137,6 +150,9 @@ function Get-AzResourceTypes {
 # Tests if the user is logged into Azure.
 # =====================================================================
 function Test-AzLoggedIn {
+    [CmdletBinding()]
+    param()
+
     <#
     .SYNOPSIS
         Tests if the user is logged into Azure.
@@ -159,6 +175,10 @@ function Test-AzLoggedIn {
         System.Boolean. Returns $true if the user is logged into Azure, otherwise $false.
     #>
 
+    # Informational logging.
+    Write-Verbose "Starting Test-AzLoggedIn function."
+
+    # Test the Azure login status.
     return [bool](az account show 2>$null)
 }
 
