@@ -2,8 +2,8 @@
 $folderName       = 'psaz'
 $scriptName       = 'psaz.ps1'
 $moduleName       = 'psaz.psm1'
-$sourceScriptPath = Join-Path $PSScriptRoot $scriptName
-$sourceModulePath = Join-Path $PSScriptRoot $moduleName
+$sourceScriptPath = Join-Path (Split-Path $PSScriptRoot -Parent) $scriptName
+$sourceModulePath = Join-Path (Split-Path $PSScriptRoot -Parent) $moduleName
 
 # Adds PSAZ to the PS Profile.
 function InstallProfile {
